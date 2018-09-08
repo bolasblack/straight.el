@@ -1731,7 +1731,7 @@ name."
       (while t
         (and (straight-vc-git--ensure-local recipe)
              (or (straight-vc-git--ensure-head
-                  local-repo branch (format "%s/%s" remote remote-branch))
+                  local-repo (format "refs/heads/%s" branch) (format "%s/%s" remote remote-branch))
                  (straight-register-repo-modification local-repo))
              (cl-return-from straight-vc-git--merge-from-remote-raw t))))))
 
@@ -1801,7 +1801,8 @@ name of this function is that no network communication is done
 with the remotes."
   (straight--with-plist recipe
       (local-repo branch)
-    (let ((branch (or branch straight-vc-git-default-branch)))
+    (let ((branch (or branch straight-vc-git-default-branch))
+          (branch (format "refs/heads/%s" branch)))
       (and (straight-vc-git--ensure-remotes recipe)
            (or (and (straight-vc-git--ensure-nothing-in-progress local-repo)
                     (straight-vc-git--ensure-worktree local-repo)
